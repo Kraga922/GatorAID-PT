@@ -11,10 +11,19 @@ from PIL import Image
 #TO RUN THIS FILE YOU NEED TO RUN THIS COMMAND IN TERMINAL: "streamlit run GatorAID.py"
 
 
+#Initialize a variable to stop reruns of streamlit (streamlit reruns whole code when interact with website - we need to stop this)
+if 'count' not in st.session_state:
+    st.session_state.count=0
+
+
+
+
 def main_page():
     # GatorAID Main Page
     image = Image.open("GatorAid.png")
-    st.image(image, width=250)
+    left, cent,last = st.columns(3)
+    with cent:
+        st.image(image, width = 230)
 
     # Navigation bar
     st.markdown(
@@ -29,7 +38,7 @@ def main_page():
             font-weight: bold;
         }
         </style>
-        <div class="navbar">GatorAID</div>
+        <div class="navbar">GatorAID Physical Therapist</div>
         """,
         unsafe_allow_html=True,
     )
@@ -54,6 +63,13 @@ def main_page():
     - Perform physical therapy exercises from the comfort of your home.
     - Stay on track with custom progress reports and exercise adjustments.
     """)
+
+    st.markdown("### How to Use")
+    st.write("""
+                    - Ensure you're in a well-lit environment for accurate motion tracking.
+                    - Position yourself far enough from the camera so your entire body is visible in the frame.
+                    - Maintain proper form and follow on-screen instructions for the best results.
+                """)
 
     # Footer
     st.markdown(
@@ -98,7 +114,7 @@ def exercise_page():
             font-weight: bold;
         }
         </style>
-        <div class="navbar">GatorAID</div>
+        <div class="navbar">GatorAID Physical Therapist</div>
         """,
         unsafe_allow_html=True,
     )
@@ -108,11 +124,37 @@ def exercise_page():
 
     # Left Column: Exercise Sections
     with col1:
+
         # Shoulder Section with Description
         with st.expander("Shoulder Recovery Exercises"):
-            if st.button("Start Shoulder Exercises"):
-                mode = "lat-raise-left"
-                count = 0
+
+            # Divide the layout into two columns
+            colsub1, colsub2 = st.columns([1, 1])
+
+            with colsub1:
+                if st.button("Start Shoulder Exercises"):
+                    mode = "lat-raise-left"
+                    count = 0
+                st.write("**Please select your shoulder pain before beginning**")
+            with colsub2:
+                st.write("  \n")
+                shoulder_pain = st.select_slider(
+                    "Indicate pain level:",
+                    options=[
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                    ],
+                )
+
 
             st.markdown("### Lateral Raises")
             st.write("Raise your arms out to the sides until they are at shoulder level, then slowly lower them.")
@@ -148,11 +190,8 @@ def exercise_page():
 
     # Right Column: Camera Placeholder
     with col2:
-        # Create a placeholder for the camera feed
+        # Create a placeholder for the camera feedss
         camera_feed = st.image([])
-        # Loading spinner while camera loads
-        with st.spinner("Loading..."):
-            cap = cv2.VideoCapture(0)
 
 
     # Footer
@@ -176,7 +215,9 @@ def exercise_page():
         """,
         unsafe_allow_html=True,
     )
-    return (camera_feed,cap,mode)
+    return (camera_feed,mode,col2)
+
+
 #sidebar for navigation in site
 page = st.sidebar.selectbox("Select a Page", ["Home", "Exercise Tracker"])
 
@@ -213,15 +254,26 @@ if page == "Home":
     main_page()
 elif page == "Exercise Tracker":
 
-    camera_feed,cap,mode=exercise_page()
+    camera_feed,mode,col2=exercise_page()
     start = False
     counter = 0
     stage = None  # represents whether or not you are at the down or up part of the curl
+    form="Good"
+
+
+    # Loads the camera for the first time and puts the spinner. solves the rerunning of camera.
+    with col2:
+        # Loading spinner while camera loads
+        with st.spinner("Loading..."):
+            if st.session_state.count == 0:
+                #This variable will store the video capture data even through the reruns of the website.
+                st.session_state.cap = cv2.VideoCapture(0)
+                st.session_state.count+=1
 
 
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-        while cap.isOpened():
-            ret, frame = cap.read()
+        while st.session_state.cap.isOpened():
+            ret, frame = st.session_state.cap.read()
             if not ret:
                 st.write("Camera not detected. Please ensure the camera is connected.")
                 break
@@ -258,22 +310,26 @@ elif page == "Exercise Tracker":
 
                     # Now draw the text on the blended image
                     cv2.putText(image, 'REPS', (15, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    cv2.putText(image, str(counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1,
+                                cv2.LINE_AA)
                     cv2.putText(image, 'STAGE', (105, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    cv2.putText(image, str(stage), (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(stage), (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1,
+                                cv2.LINE_AA)
                     cv2.putText(image, str(mode), (15, 87), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
 
-                    # cv2.putText(image, 'FORM', (400, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    # cv2.putText(image, str(form), (395, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
                     # Rep data
                     cv2.putText(image, 'REPS', (15, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    cv2.putText(image, str(counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1,
+                                cv2.LINE_AA)
 
                     cv2.putText(image, 'STAGE', (105, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    cv2.putText(image, str(stage), (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
-                    cv2.putText(image, str(mode), (15, 87), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    # cv2.putText(image, 'FORM', (400, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-                    # cv2.putText(image, str(form), (395, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(stage), (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1,
+                                cv2.LINE_AA)
+
+                    cv2.putText(image, 'FORM', (400, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(form), (395, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1,
+                                cv2.LINE_AA)
+
                     # Render detection
 
                     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
@@ -396,23 +452,24 @@ elif page == "Exercise Tracker":
                         pointC = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
-                    # calculate angle
+                # calculate angle
                 angle = calculate_angle(pointA, pointB, pointC)
 
                 # calc check angle
-                if pointA_check:
+                if mode != "bicep-curl-left" and mode != "bicep-curl-right" and pointA_check:
                     angle_check = calculate_angle(pointA_check, pointB_check, pointC_check)
 
                 # visualize
-                cv2.putText(image, str(angle),
+                cv2.putText(image, str(math.floor(angle)),
                             tuple(np.multiply(pointB, [640, 480]).astype(int)),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                             )
                 if start:
                     if mode == "bicep-curl-left" or mode == "bicep-curl-right":
-                        form = "Good"
+
                         if angle > 135:
                             stage = "down"
+                            form = "Good"
                         if angle < 30 and stage == "down":
                             stage = "up"
                             counter += 1
@@ -439,12 +496,12 @@ elif page == "Exercise Tracker":
                                 else:
                                     mode = "shoulder-press-left"
                     elif mode == "shoulder-press-left" or mode == "shoulder-press-right":
-                        # if angle_check> 115:
-                        #     form = "Move arm inward"
-                        # elif angle_check< 65:
-                        #     form = "Move arm outward"
-                        # else:
-                        form = "Good"
+                        if angle_check > 115:
+                            form = "Move arm inward"
+                        elif angle_check < 65:
+                            form = "Move arm outward"
+                        else:
+                            form = "Good"
                         if angle < 90:
                             stage = "down"
                         if angle > 140 and stage == "down":
@@ -509,5 +566,5 @@ elif page == "Exercise Tracker":
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
 
-    cap.release()
+    st.session_state.cap.release()
     cv2.destroyAllWindows()
