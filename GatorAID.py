@@ -248,7 +248,7 @@ elif page == "Exercise Tracker":
                     overlay = image.copy()
 
                     # Draw the filled rectangle on the overlay
-                    cv2.rectangle(overlay, (0, 0), (305, 73), (245, 117, 16), -1)  # Color: (B, G, R)
+                    cv2.rectangle(overlay, (0, 0), (1150, 73), (245, 117, 16), -1)  # Color: (B, G, R)
 
                     # Set the transparency level (0.0 - completely transparent, 1.0 - completely opaque)
                     alpha = 0.5  # Adjust this value for desired transparency
@@ -262,6 +262,9 @@ elif page == "Exercise Tracker":
                     cv2.putText(image, 'STAGE', (105, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
                     cv2.putText(image, str(stage), (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
                     cv2.putText(image, str(mode), (15, 87), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+
+                    # cv2.putText(image, 'FORM', (400, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+                    # cv2.putText(image, str(form), (395, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
                     # Rep data
                     cv2.putText(image, 'REPS', (15, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
                     cv2.putText(image, str(counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
@@ -269,7 +272,8 @@ elif page == "Exercise Tracker":
                     cv2.putText(image, 'STAGE', (105, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
                     cv2.putText(image, str(stage), (100, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
                     cv2.putText(image, str(mode), (15, 87), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-
+                    # cv2.putText(image, 'FORM', (400, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+                    # cv2.putText(image, str(form), (395, 60), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
                     # Render detection
 
                     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
@@ -300,6 +304,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
                     case "arm-swing-right":
                         pointA = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
@@ -307,6 +318,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
                     case "lat-raise-left":
                         pointA = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
@@ -314,6 +332,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
                     case "lat-raise-right":
                         pointA = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
@@ -321,6 +346,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
                     case "shoulder-press-left":
                         pointA = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
@@ -328,6 +360,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
+                                        landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
                     case "shoulder-press-right":
                         pointA = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
@@ -335,6 +374,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
+                                        landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
                     case "quad-stretch-right" | "squats" | "hamstring-curl-left":
                         pointA = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
@@ -350,16 +396,22 @@ elif page == "Exercise Tracker":
                         pointC = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
-                # calculate angle
+                    # calculate angle
                 angle = calculate_angle(pointA, pointB, pointC)
+
+                # calc check angle
+                if pointA_check:
+                    angle_check = calculate_angle(pointA_check, pointB_check, pointC_check)
+
                 # visualize
-                cv2.putText(image, str(math.floor(angle)),
+                cv2.putText(image, str(angle),
                             tuple(np.multiply(pointB, [640, 480]).astype(int)),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                             )
                 if start:
                     if mode == "bicep-curl-left" or mode == "bicep-curl-right":
-                        if angle > 160:
+                        form = "Good"
+                        if angle > 135:
                             stage = "down"
                         if angle < 30 and stage == "down":
                             stage = "up"
@@ -371,18 +423,28 @@ elif page == "Exercise Tracker":
                             else:
                                 mode = "lat-raise-left"
                     elif mode == "lat-raise-left" or mode == "lat-raise-right":
-                        if angle < 20:
-                            stage = "down"
-                        if angle > 80 and stage == "down":
-                            stage = "up"
-                            counter += 1
-                        if counter >= 10:
-                            counter = 0
-                            if mode == "lat-raise-left":
-                                mode = "lat-raise-right"
-                            else:
-                                mode = "shoulder-press-left"
+                        if angle_check < 150:
+                            form = "Straighten Elbow"
+                        else:
+                            form = "Good"
+                            if angle < 20:
+                                stage = "down"
+                            if angle > 80 and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if mode == "lat-raise-left":
+                                    mode = "lat-raise-right"
+                                else:
+                                    mode = "shoulder-press-left"
                     elif mode == "shoulder-press-left" or mode == "shoulder-press-right":
+                        # if angle_check> 115:
+                        #     form = "Move arm inward"
+                        # elif angle_check< 65:
+                        #     form = "Move arm outward"
+                        # else:
+                        form = "Good"
                         if angle < 90:
                             stage = "down"
                         if angle > 140 and stage == "down":
@@ -395,19 +457,24 @@ elif page == "Exercise Tracker":
                             else:
                                 mode = "arm-swing-left"
                     elif mode == "arm-swing-left" or mode == "arm-swing-right":
-                        if angle < 20:
-                            stage = "down"
-                        if angle > 160 and stage == "down":
-                            stage = "up"
-                            counter += 1
-                        if counter >= 10:
-                            counter = 0
-                            if mode == "arm-swing-left":
-                                mode = "arm-swing-right"
-                            else:
-                                mode = "quad-stretch-left"
+                        if angle_check < 130:
+                            form = "Straighten Elbow"
+                        else:
+                            form = "Good"
+                            if angle < 20:
+                                stage = "down"
+                            if angle > 160 and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if mode == "arm-swing-left":
+                                    mode = "arm-swing-right"
+                                else:
+                                    mode = "quad-stretch-left"
                     elif mode == "quad-stretch-left" or mode == "quad-stretch-right" or mode == "hamstring-curl-left" or mode == "hamstring-curl-right":
-                        if angle > 110:
+                        form = "Good"
+                        if angle > 95:
                             stage = "down"
                         if angle < 20 and stage == "down":
                             stage = "up"
@@ -423,6 +490,7 @@ elif page == "Exercise Tracker":
                             elif mode == "hamstring-curl-right":
                                 mode = "squats"
                     elif mode == "squats":
+                        form = "Good"
                         if angle > 120:
                             stage = "up"
                         if angle < 80 and stage == "down":
