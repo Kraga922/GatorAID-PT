@@ -413,6 +413,14 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                                  landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                  landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                                  landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+
                     case "bicep-curl-right":
                         pointA = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
@@ -420,6 +428,13 @@ elif page == "Exercise Tracker":
                                   landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
                         pointC = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                                   landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
+
+                        pointA_check = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
+                                  landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+                        pointB_check = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                                  landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+                        pointC_check = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                                  landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
                     case "arm-swing-left":
                         pointA = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
                                   landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
@@ -523,7 +538,7 @@ elif page == "Exercise Tracker":
                 angle = calculate_angle(pointA, pointB, pointC)
 
                 # calc check angle
-                if mode != "bicep-curl-left" and mode != "bicep-curl-right" and pointA_check:
+                if pointA_check:
                     angle_check = calculate_angle(pointA_check, pointB_check, pointC_check)
 
                 # visualize
@@ -533,19 +548,22 @@ elif page == "Exercise Tracker":
                             )
                 if start:
                     if mode == "bicep-curl-left" or mode == "bicep-curl-right":
-
-                        if angle > 135:
-                            stage = "down"
+                        if angle_check > 30:
+                            form = "Move Elbow Inward"
+                        else:
                             form = "Good"
-                        if angle < 30 and stage == "down":
-                            stage = "up"
-                            counter += 1
-                        if counter >= 10:
-                            counter = 0
-                            if mode == "bicep-curl-left":
-                                mode = "bicep-curl-right"
-                            else:
-                                mode = "lat-raise-left"
+                            if angle > 135:
+                                stage = "down"
+                                form = "Good"
+                            if angle < 30 and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if mode == "bicep-curl-left":
+                                    mode = "bicep-curl-right"
+                                else:
+                                    mode = "lat-raise-left"
                     elif mode == "lat-raise-left" or mode == "lat-raise-right":
                         if angle_check < 150:
                             form = "Straighten Elbow"
