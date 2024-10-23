@@ -128,7 +128,7 @@ def exercise_page():
         # Shoulder Section with Description
         with st.expander("Shoulder Recovery Exercises"):
 
-            # Divide the layout into two columns
+            # Divide the layout into two sub columns
             colsub1, colsub2 = st.columns([1, 1])
 
             with colsub1:
@@ -153,6 +153,7 @@ def exercise_page():
                         9,
                         10,
                     ],
+                    key = 'shoulder'
                 )
 
 
@@ -167,9 +168,34 @@ def exercise_page():
 
         # Knee Section with Description
         with st.expander("Knee Recovery Exercises"):
-            if st.button("Start Knee Exercises"):
-                mode = "quad-stretch-left"
-                count = 0
+
+            # Divide the layout into two sub columns
+            colsub1, colsub2 = st.columns([1, 1])
+
+            with colsub1:
+                if st.button("Start Knee Exercises"):
+                    mode = "quad-stretch-left"
+                    count = 0
+                st.write("**Please select your knee pain before beginning**")
+            with colsub2:
+                st.write("  \n")
+                knee_pain = st.select_slider(
+                    "Indicate pain level:",
+                    options=[
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                    ],
+                    key = 'knee',
+                )
 
             st.markdown("### Quad Stretch")
             st.write("Stand on one leg and pull your opposite ankle towards your glutes to stretch your quadriceps.")
@@ -182,9 +208,35 @@ def exercise_page():
 
         # Bicep Section with Description
         with st.expander("Bicep Recovery Exercise"):
-            if st.button("Start Bicep Exercise"):
-                mode = "bicep-curl-left"
-                count = 0
+
+            # Divide the layout into two sub columns
+            colsub1, colsub2 = st.columns([1, 1])
+
+            with colsub1:
+                if st.button("Start Bicep Exercises"):
+                    mode = "bicep-curl-left"
+                    count = 0
+                st.write("**Please select your bicep pain before beginning**")
+            with colsub2:
+                st.write("  \n")
+                bicep_pain = st.select_slider(
+                    "Indicate pain level:",
+                    options=[
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                    ],
+                    key = 'bicep',
+                )
+
             st.markdown("### Bicep Curl")
             st.write("Hold weights and curl your arms upwards, bringing your palms towards your shoulders to work your biceps.")
 
@@ -215,11 +267,21 @@ def exercise_page():
         """,
         unsafe_allow_html=True,
     )
-    return (camera_feed,mode,col2)
+    return (camera_feed,mode,col2,shoulder_pain,knee_pain,bicep_pain)
 
 
 #sidebar for navigation in site
-page = st.sidebar.selectbox("Select a Page", ["Home", "Exercise Tracker"])
+with st.sidebar:
+    page = st.selectbox("Select a Page", ["Home", "Exercise Tracker"])
+    st.write("") #just some empty space
+    st.write("") #just having some fun
+    st.write("") #omg look at the cute baby :O
+    st.write("") #so cute I love it !!! <3
+    baby_image = Image.open("babyGatorAid.png")
+    filler1, center,filler2 = st.columns([1, 10, 4])
+    with center:
+        st.image(baby_image, width = 230)
+
 
 
 def calculate_angle(a, b, c):
@@ -254,7 +316,8 @@ if page == "Home":
     main_page()
 elif page == "Exercise Tracker":
 
-    camera_feed,mode,col2=exercise_page()
+    #initialize all variables by unpacking function
+    camera_feed,mode,col2,shoulder_pain,knee_pain,bicep_pain=exercise_page()
     start = False
     counter = 0
     stage = None  # represents whether or not you are at the down or up part of the curl
@@ -269,6 +332,10 @@ elif page == "Exercise Tracker":
                 #This variable will store the video capture data even through the reruns of the website.
                 st.session_state.cap = cv2.VideoCapture(0)
                 st.session_state.count+=1
+        st.write("Current Exercise: " + mode)
+        st.write("Shoulder Pain: " + str(shoulder_pain))
+        st.write("Knee Pain: " + str(knee_pain))
+        st.write("Bicep Pain: " + str(bicep_pain))
 
 
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
