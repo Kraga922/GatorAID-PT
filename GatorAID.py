@@ -133,7 +133,8 @@ def exercise_page():
 
             with colsub1:
                 if st.button("Start Shoulder Exercises"):
-                    mode = "lat-raise-left"
+                    # mode = "lat-raise-left"
+                    mode = "shoulder-press-left"
                     count = 0
                 st.write("**Please select your shoulder pain before beginning**")
             with colsub2:
@@ -262,7 +263,7 @@ def exercise_page():
         }
         </style>
         <div class="footer">
-        Copyright © 2024. Kiran Nadanam, Ryan Nadanam, Krishiv Agarwal, Kevin Duong. All rights reserved.
+        Copyright © 2024. Kiran Nadanam, Ryan Nadanam, Krishiv Agarwal. All rights reserved.
         </div>
         """,
         unsafe_allow_html=True,
@@ -581,23 +582,25 @@ elif page == "Exercise Tracker":
                                 else:
                                     mode = "shoulder-press-left"
                     elif mode == "shoulder-press-left" or mode == "shoulder-press-right":
-                        if angle_check > 115:
-                            form = "Move arm inward"
-                        elif angle_check < 65:
-                            form = "Move arm outward"
+                        # if angle_check > 115:
+                        #     form = "Move arm inward"
+                        # elif angle_check < 65:
+                        #     form = "Move arm outward"
+                        if abs(angle - angle_check) > 15:
+                            form = "Fix Form" 
                         else:
                             form = "Good"
-                        if angle < 90:
-                            stage = "down"
-                        if angle > 140 and stage == "down":
-                            stage = "up"
-                            counter += 1
-                        if counter >= 10:
-                            counter = 0
-                            if mode == "shoulder-press-left":
-                                mode = "shoulder-press-right"
-                            else:
-                                mode = "arm-swing-left"
+                            if angle < 90:
+                                stage = "down"
+                            if angle > 140 and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if mode == "shoulder-press-left":
+                                    mode = "shoulder-press-right"
+                                else:
+                                    mode = "arm-swing-left"
                     elif mode == "arm-swing-left" or mode == "arm-swing-right":
                         if angle_check < 130:
                             form = "Straighten Elbow"
