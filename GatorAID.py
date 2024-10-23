@@ -587,7 +587,7 @@ elif page == "Exercise Tracker":
                         # elif angle_check < 65:
                         #     form = "Move arm outward"
                         if abs(angle - angle_check) > 15:
-                            form = "Fix Form" 
+                            form = "Align hand with shoulder" 
                         else:
                             form = "Good"
                             if angle < 90:
