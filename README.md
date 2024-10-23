@@ -16,7 +16,8 @@ Make sure you have the following software installed on your computer:
 You need to install the following Python libraries:
 - **NumPy**: For numerical computing.
 - **MediaPipe** Graphical tracking machine learning model.
-- **OpenCV** Opens stream. 
+- **OpenCV** Used for image manipulation.
+- **streamlit** Used for the GUI.
 
 ### Clone the Repository
 
@@ -24,7 +25,7 @@ You need to install the following Python libraries:
 2. Run the following command to clone the repository:
 
     ```bash
-    git clone https://github.com/Kraga922/GatorAID
+    git clone https://github.com/Kraga922/GatorAID-PT
     ```
 
 
@@ -33,7 +34,7 @@ You need to install the following Python libraries:
 Change to the directory where the GatorAID folder was downloaded:
 
 ```bash
-cd GatorAID
+cd GatorAID-PT
 ```
 
 4. Install the project requirements
@@ -45,7 +46,7 @@ pip install -r requirements.txt
 5. Run the app
 
 ```bash
-python3 app2.py
+streamlit run PATH_TO_REPO/GatorAID-PT/GatorAID.py             
 ```
 
 To achieve the best results, ensure that you have a well-lit area with minimal clutter. Position your camera at a height that captures your full body during exercises.
