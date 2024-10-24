@@ -606,6 +606,7 @@ elif page == "Exercise Tracker":
                                             st.session_state.mode = "bicep-curl-right"
                                         else:
                                             st.session_state.mode = "lat-raise-left"
+                                            st.balloons()
                             elif st.session_state.mode == "lat-raise-left" or st.session_state.mode == "lat-raise-right":
                                 if angle_check < 150:
                                     form = "Straighten Elbow"
@@ -657,6 +658,7 @@ elif page == "Exercise Tracker":
                                         if st.session_state.mode == "arm-swing-left":
                                             st.session_state.mode = "arm-swing-right"
                                         else:
+                                            st.balloons()
                                             st.session_state.mode = "quad-stretch-left"
                             elif st.session_state.mode == "quad-stretch-left" or st.session_state.mode == "quad-stretch-right" or st.session_state.mode == "hamstring-curl-left" or st.session_state.mode == "hamstring-curl-right":
                                 form = "Good"
@@ -722,6 +724,7 @@ elif page == "Exercise Tracker":
                                 if counter >= 10:
                                     counter = 0
                                     st.session_state.mode = "bicep-curl-left"
+                                    st.balloons()
 
             except:
                 pass
