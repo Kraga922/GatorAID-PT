@@ -659,7 +659,7 @@ elif page == "Exercise Tracker":
                                             st.session_state.mode = "arm-swing-right"
                                         else:
                                             st.balloons()
-                                            st.session_state.mode = "quad-stretch-left"
+                                            st.session_state.mode = "squats"
                             elif st.session_state.mode == "quad-stretch-left" or st.session_state.mode == "quad-stretch-right" or st.session_state.mode == "hamstring-curl-left" or st.session_state.mode == "hamstring-curl-right":
                                 form = "Good"
                                 if angle > 95:
@@ -676,7 +676,7 @@ elif page == "Exercise Tracker":
                                     elif st.session_state.mode == "hamstring-curl-left":
                                         st.session_state.mode = "hamstring-curl-right"
                                     elif st.session_state.mode == "hamstring-curl-right":
-                                        st.session_state.mode = "squats"
+                                        st.session_state.mode = "bicep-curl-left"
                             elif st.session_state.mode == "squats":
                                 # Points for leg angle (hip-knee-ankle)
                                 pointA = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
@@ -723,7 +723,7 @@ elif page == "Exercise Tracker":
                                 # Reset counter and mode after 10 reps
                                 if counter >= 10:
                                     counter = 0
-                                    st.session_state.mode = "bicep-curl-left"
+                                    st.session_state.mode = "quad-stretch-left"
                                     st.balloons()
 
             except:
