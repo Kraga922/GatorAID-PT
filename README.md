@@ -17,7 +17,7 @@ You need to install the following Python libraries:
 - **NumPy**: For numerical computing.
 - **MediaPipe** Graphical tracking machine learning model.
 - **OpenCV** Used for image manipulation.
-- **streamlit** Used for the GUI.
+- **Streamlit** Used for the GUI.
 
 ### Clone the Repository
 
