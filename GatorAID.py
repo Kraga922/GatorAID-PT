@@ -93,7 +93,7 @@ def main_page():
         }
         </style>
         <div class="footer">
-        Copyright © 2024. Kiran Nadanam, Ryan Nadanam, Krishiv Agarwal, Kevin Duong. All rights reserved.
+        Copyright © 2024. Kiran Nadanam, Ryan Nadanam, Krishiv Agarwal. All rights reserved.
         </div>
         """,
         unsafe_allow_html=True,
@@ -280,7 +280,7 @@ def exercise_page():
         }
         </style>
         <div class="footer">
-        Copyright © 2024. Kiran Nadanam, Ryan Nadanam, Krishiv Agarwal, Kevin Duong. All rights reserved.
+        Copyright © 2024. Kiran Nadanam, Ryan Nadanam, Krishiv Agarwal. All rights reserved.
         </div>
         """,
         unsafe_allow_html=True,
