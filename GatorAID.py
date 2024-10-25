@@ -583,148 +583,136 @@ elif page == "Exercise Tracker":
                     if pointA_check:
                         angle_check = calculate_angle(pointA_check, pointB_check, pointC_check)
 
-                        # visualize
-                        cv2.putText(image, str(math.floor(angle)),
-                                    tuple(np.multiply(pointB, [640, 480]).astype(int)),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
-                                    )
-                        if start:
-                            if st.session_state.mode == "bicep-curl-left" or st.session_state.mode == "bicep-curl-right":
-                                if angle_check > 30:
-                                    form = "Move Elbow Inward"
-                                else:
-                                    form = "Good"
-                                    if angle > 150 - bicep_pain * 4:
-                                        stage = "down"
-                                        form = "Good"
-                                    if angle < 30 + bicep_pain * 3 and stage == "down":
-                                        stage = "up"
-                                        counter += 1
-                                    if counter >= 10:
-                                        counter = 0
-                                        if st.session_state.mode == "bicep-curl-left":
-                                            st.session_state.mode = "bicep-curl-right"
-                                        else:
-                                            st.session_state.mode = "lat-raise-left"
-                                            st.balloons()
-                            elif st.session_state.mode == "lat-raise-left" or st.session_state.mode == "lat-raise-right":
-                                if angle_check < 150:
-                                    form = "Straighten Elbow"
-                                else:
-                                    form = "Good"
-                                    if angle < 20:
-                                        stage = "down"
-                                    if angle > 80 - 3 * shoulder_pain and stage == "down":
-                                        stage = "up"
-                                        counter += 1
-                                    if counter >= 10:
-                                        counter = 0
-                                        if st.session_state.mode == "lat-raise-left":
-                                            st.session_state.mode = "lat-raise-right"
-                                        else:
-                                            st.session_state.mode = "shoulder-press-left"
-                            elif st.session_state.mode == "shoulder-press-left" or st.session_state.mode == "shoulder-press-right":
-                                if angle_check > 115:
-                                    form = "Move arm inward"
-                                elif angle_check < 65:
-                                    form = "Move arm outward"
-                                if abs(angle - angle_check) > 15:
-                                    form = "Fix Form"
-                                else:
-                                    form = "Good"
-                                    if angle < 90:
-                                        stage = "down"
-                                    if angle > 140 - 3 * shoulder_pain and stage == "down":
-                                        stage = "up"
-                                        counter += 1
-                                    if counter >= 10:
-                                        counter = 0
-                                        if st.session_state.mode == "shoulder-press-left":
-                                            st.session_state.mode = "shoulder-press-right"
-                                        else:
-                                            st.session_state.mode = "arm-swing-left"
-                            elif st.session_state.mode == "arm-swing-left" or st.session_state.mode == "arm-swing-right":
-                                if angle_check < 130:
-                                    form = "Straighten Elbow"
-                                else:
-                                    form = "Good"
-                                    if angle < 20:
-                                        stage = "down"
-                                    if angle > 160 and stage == "down":
-                                        stage = "up"
-                                        counter += 1
-                                    if counter >= 10:
-                                        counter = 0
-                                        if st.session_state.mode == "arm-swing-left":
-                                            st.session_state.mode = "arm-swing-right"
-                                        else:
-                                            st.balloons()
-                                            st.session_state.mode = "squats"
-                            elif st.session_state.mode == "quad-stretch-left" or st.session_state.mode == "quad-stretch-right" or st.session_state.mode == "hamstring-curl-left" or st.session_state.mode == "hamstring-curl-right":
+                # visualize
+                cv2.putText(image, str(math.floor(angle)),
+                            tuple(np.multiply(pointB, [640, 480]).astype(int)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
+                            )
+
+                if start:
+                    if st.session_state.mode == "bicep-curl-left" or st.session_state.mode == "bicep-curl-right":
+                        if angle_check > 30:
+                            form = "Move Elbow Inward"
+                        else:
+                            form = "Good"
+                            if angle > 150 - bicep_pain * 4:
+                                stage = "down"
                                 form = "Good"
-                                if angle > 95:
-                                    stage = "down"
-                                if angle < 20 and stage == "down":
-                                    stage = "up"
-                                    counter += 1
-                                if counter >= 10:
-                                    counter = 0
-                                    if st.session_state.mode == "quad-stretch-left":
-                                        st.session_state.mode = "quad-stretch-right"
-                                    elif st.session_state.mode == "quad-stretch-right":
-                                        st.session_state.mode = "hamstring-curl-left"
-                                    elif st.session_state.mode == "hamstring-curl-left":
-                                        st.session_state.mode = "hamstring-curl-right"
-                                    elif st.session_state.mode == "hamstring-curl-right":
-                                        st.session_state.mode = "bicep-curl-left"
-                            elif st.session_state.mode == "squats":
-                                # Points for leg angle (hip-knee-ankle)
-                                pointA = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
-                                          landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y,
-                                          landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].z]
-                                pointB = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,
-                                          landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y,
-                                          landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].z]
-                                pointC = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,
-                                          landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y,
-                                          landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].z]
-
-                                # Points for back posture check (shoulder-hip)
-                                pointA_back = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
-                                               landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y,
-                                               landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].z]
-                                pointB_back = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
-                                               landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y,
-                                               landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].z]
-
-                                # Calculate the 3D back angle based on shoulder-hip slope
-                                angle_back_3d = calculate_slope_3d(pointA_back, pointB_back)
-
-                                # Set a tolerance to detect forward leaning (e.g., if the back angle is steep)
-                                straight_back_min = -10  # Upright (minimal forward lean)
-                                straight_back_max = 60  # Allow degrees forward lean
-
-                                if straight_back_min <= angle_back_3d <= straight_back_max:
-                                    form = "Good"
+                            if angle < 30 + bicep_pain * 3 and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if st.session_state.mode == "bicep-curl-left":
+                                    st.session_state.mode = "bicep-curl-right"
                                 else:
-                                    form = "Adjust posture"
-
-                                # Calculate the leg angle (hip-knee-ankle)
-                                angle_leg = calculate_angle(pointA, pointB, pointC)
-
-                                # Squat stage logic
-                                if angle_leg > 160:
-                                    stage = "up"
-                                elif angle_leg < 90 + knee_pain * 3 and stage == "up":
-                                    stage = "down"
-                                    counter += 1
-                                    form = "Good" if straight_back_min <= angle_back_3d <= straight_back_max else "Adjust posture"
-
-                                # Reset counter and mode after 10 reps
-                                if counter >= 10:
-                                    counter = 0
-                                    st.session_state.mode = "quad-stretch-left"
+                                    st.session_state.mode = "lat-raise-left"
                                     st.balloons()
+                    elif st.session_state.mode == "lat-raise-left" or st.session_state.mode == "lat-raise-right":
+                        if angle_check < 150:
+                            form = "Straighten Elbow"
+                        else:
+                            form = "Good"
+                            if angle < 20:
+                                stage = "down"
+                            if angle > 80 - 3 * shoulder_pain and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if st.session_state.mode == "lat-raise-left":
+                                    st.session_state.mode = "lat-raise-right"
+                                else:
+                                    st.session_state.mode = "shoulder-press-left"
+                    elif st.session_state.mode == "shoulder-press-left" or st.session_state.mode == "shoulder-press-right":
+                        if angle_check > 115:
+                            form = "Move arm inward"
+                        elif angle_check < 65:
+                            form = "Move arm outward"
+                        if abs(angle - angle_check) > 15:
+                            form = "Fix Form"
+                        else:
+                            form = "Good"
+                            if angle < 90:
+                                stage = "down"
+                            if angle > 140 - 3 * shoulder_pain and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if st.session_state.mode == "shoulder-press-left":
+                                    st.session_state.mode = "shoulder-press-right"
+                                else:
+                                    st.session_state.mode = "arm-swing-left"
+                    elif st.session_state.mode == "arm-swing-left" or st.session_state.mode == "arm-swing-right":
+                        if angle_check < 130:
+                            form = "Straighten Elbow"
+                        else:
+                            form = "Good"
+                            if angle < 20:
+                                stage = "down"
+                            if angle > 160 and stage == "down":
+                                stage = "up"
+                                counter += 1
+                            if counter >= 10:
+                                counter = 0
+                                if st.session_state.mode == "arm-swing-left":
+                                    st.session_state.mode = "arm-swing-right"
+                                else:
+                                    st.balloons()
+                                    st.session_state.mode = "squats"
+                    elif st.session_state.mode == "quad-stretch-left" or st.session_state.mode == "quad-stretch-right" or st.session_state.mode == "hamstring-curl-left" or st.session_state.mode == "hamstring-curl-right":
+                        form = "Good"
+                        if angle > 95:
+                            stage = "down"
+                        if angle < 20 and stage == "down":
+                            stage = "up"
+                            counter += 1
+                        if counter >= 10:
+                            counter = 0
+                            if st.session_state.mode == "quad-stretch-left":
+                                st.session_state.mode = "quad-stretch-right"
+                            elif st.session_state.mode == "quad-stretch-right":
+                                st.session_state.mode = "hamstring-curl-left"
+                            elif st.session_state.mode == "hamstring-curl-left":
+                                st.session_state.mode = "hamstring-curl-right"
+                            elif st.session_state.mode == "hamstring-curl-right":
+                                st.balloons()
+                                st.session_state.mode = "bicep-curl-left"
+                    elif st.session_state.mode == "squats":
+
+                        # Points for back posture check (shoulder-hip)
+                        pointA_back = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                       landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y,
+                                       landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].z]
+                        pointB_back = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                                       landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y,
+                                       landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].z]
+
+                        # Calculate the 3D back angle based on shoulder-hip slope
+                        angle_back_3d = calculate_slope_3d(pointA_back, pointB_back)
+
+                        # Set a tolerance to detect forward leaning (e.g., if the back angle is steep)
+                        straight_back_min = -10  # Upright (minimal forward lean)
+                        straight_back_max = 60  # Allow degrees forward lean
+
+                        if straight_back_min <= angle_back_3d <= straight_back_max:
+                            form = "Good"
+                        else:
+                            form = "Adjust posture"
+
+                        # Squat stage logic
+                        if angle > 170:
+                            stage = "up"
+                        elif angle < 135 + knee_pain * 3 and stage == "up":
+                            stage = "down"
+                            counter += 1
+                            form = "Good" if straight_back_min <= angle_back_3d <= straight_back_max else "Adjust posture"
+
+                        # Reset counter and mode after 10 reps
+                        if counter >= 10:
+                            counter = 0
+                            st.session_state.mode = "quad-stretch-left"
 
             except:
                 pass
