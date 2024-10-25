@@ -188,7 +188,7 @@ def exercise_page():
 
             with colsub1:
                 if st.button("Start Knee Exercises"):
-                    mode = "quad-stretch-left"
+                    mode = "squats"
                     count = 0
                 st.write("**Please select your knee pain before beginning**")
             with colsub2:
@@ -213,14 +213,14 @@ def exercise_page():
             if knee_pain > 7:
                 st.warning("We recommend you do not exercise with your amount of pain. Please go see a doctor.",icon="⚠️")
 
+            st.markdown("### [Squats](%s)" % "https://www.realsimple.com/health/fitness-exercise/workouts/squat-form#:~:text=Sit%20down%20into%20a%20squat,back%20to%20a%20standing%20position.")
+            st.write("Lower your body by bending your knees and hips. Then, return to standing position.")
+
             st.markdown("### [Quad Stretch](%s)" % "https://www.youtube.com/watch?v=Uwwuc8pRRc0")
             st.write("Stand on one leg and pull your opposite ankle towards your glutes to stretch your quadriceps.")
 
             st.markdown("### [Hamstring Curl](%s)" % "https://www.healthline.com/health/hamstring-curls")
             st.write("Stand and curl your leg backwards, bringing your heel toward your glutes to engage your hamstring.")
-
-            st.markdown("### [Squats](%s)" % "https://www.realsimple.com/health/fitness-exercise/workouts/squat-form#:~:text=Sit%20down%20into%20a%20squat,back%20to%20a%20standing%20position.")
-            st.write("Lower your body by bending your knees and hips. Then, return to standing position.")
 
         # Bicep Section with Description
         with st.expander("Bicep Recovery Exercise"):
